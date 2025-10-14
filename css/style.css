@@ -11,6 +11,8 @@
    Base styles: opinionated defaults
    ========================================================================== */
 
+
+
 html {
   color: #222;
   font-size: 1em;
@@ -74,12 +76,41 @@ html {
   background-color: #ddd;
 }
 .divWrapper ul {
-display: grid;
-grid-auto-flow: column;
-grid-template-rows: repeat(15, auto);
-gap: 8px 24px;
-justify-items: center;
-text-align: center;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(15, auto);
+  gap: 8px 24px;
+  justify-items: center;
+  text-align: center;
+}
+
+#divWrapper li{
+  padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 6px 14px rgba(2,8,23,.22);
+  transform: translateY(6px); opacity: 0; animation: rise .45s ease forwards;
+}
+#divWrapper li:nth-child(8n){ animation-delay: .02s }
+#divWrapper li:nth-child(8n+2){ animation-delay: .05s }
+#divWrapper li:nth-child(8n+4){ animation-delay: .08s }
+#divWrapper li:nth-child(8n+6){ animation-delay: .11s }
+@keyframes rise{ to{ transform: translateY(0); opacity: 1 } }
+
+/* Responsive */
+@media (max-width: 780px){
+  .shell{ padding: 28px 16px 20px }
+  .Title{ letter-spacing: 0 }
+  #divWrapper ul{ grid-template-rows: repeat(10, auto) }
+}
+@media (max-width: 520px){
+  #divWrapper ul{ grid-template-rows: repeat(8, auto) }
+  .button{ min-width: 110px }
+}
+
+/* A11y utility */
+.sr-only{
+  position:absolute; width:1px; height:1px; padding:0; margin:-1px;
+  overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
 }
 
 /*

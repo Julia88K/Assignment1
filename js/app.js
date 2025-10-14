@@ -1,4 +1,3 @@
-
 (() => {
   document.addEventListener('DOMContentLoaded', async () => {
     // Man hämtar referenser till HTML-elementen i index.html via deras ID-attribut.
@@ -45,7 +44,7 @@
       for (const ch of letters) {
         if (have[ch]) have[ch]++;
         else have[ch] = 1;
-        }
+      }
       for (const ch of word) {
         if (!have[ch]) return false;
         have[ch]--;
