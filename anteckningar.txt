@@ -1,0 +1,62 @@
+const startButton = document.getElementById("start");
+const resetButton = document.getElementById("reset");
+const inputWord   = document.getElementById("input");
+const divWrapper  = document.getElementById("divWrapper");
+
+let dictionaryList = [];
+startButton.disabled = true; // erst aktiv, wenn Liste geladen
+
+function canBeMadeFrom(word, letters) {
+  const available = letters.split("");
+  for (const ch of word) {
+    const i = available.indexOf(ch);
+    if (i === -1) return false;
+    available.splice(i, 1);
+  }
+  return true;
+}
+
+// Wortliste laden
+fetch("https://raw.githubusercontent.com/Torbacka/wordlist/master/SAOL13_117224_Ord.txt")
+  .then(r => r.text())
+  .then(t => {
+    dictionaryList = t
+      .split(/\r?\n/)
+      .map(w => w.trim())
+      .filter(Boolean)
+      .filter(w => /^[a-zåäö]+$/i.test(w))
+      .map(w => w.normalize("NFC").toLocaleUpperCase("sv-SE"));
+
+    startButton.disabled = false;
+  })
+  .catch(err => {
+    console.error("Dictionary load failed:", err);
+  });
+
+// Suchen & anzeigen
+startButton.addEventListener("click", () => {
+  const input = (inputWord.value || "")
+    .trim()
+    .normalize("NFC")
+    .toLocaleUpperCase("sv-SE");
+  if (!input) return;
+
+  const containedWords = dictionaryList
+    .filter(w => w.length > 1 && w.length <= input.length && canBeMadeFrom(w, input))
+    .sort((a,b) => a.length - b.length || a.localeCompare(b, "sv"));
+
+  divWrapper.innerHTML = "";
+  const ul = document.createElement("ul");
+  containedWords.forEach(word => {
+    const li = document.createElement("li");
+    li.textContent = word;
+    ul.appendChild(li);
+  });
+  divWrapper.appendChild(ul);
+});
+
+// Reset (→ hier war der Bug: q → inputWord)
+resetButton.addEventListener("click", () => {
+  inputWord.value = "";
+  divWrapper.innerHTML = "";
+});
