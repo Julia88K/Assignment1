@@ -64,8 +64,8 @@
     startButton.addEventListener("click", () => {
 
       /* Skapar en funktion som först skapar en paragraph-element i HTML-filen som får klassen
-      "message" tilldelad, och innehållet blir string-parametern (stringIn), alltihop slängs in i
-      divven divWrapper */
+      "message" tilldelad, och innehållet av "para1" är string-parametern (stringIn);
+      paragraph-elementet bifogas till divven "divWrapper" */
       function showMessage(stringIn) {
         let para1 = document.createElement('p');
         para1.innerText = stringIn;
