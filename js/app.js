@@ -1,6 +1,6 @@
 (() => {
   document.addEventListener('DOMContentLoaded', async () => {
-    // Man hämtar referenser till HTML-elementen i index.html via deras ID-attribut.
+    // Här hämtas referenser till HTML-elementen i index.html via deras ID-attribut.
     // Så kan man koppla ihop javascript med HTML-filen.
     const startButton = document.getElementById("start");
     const resetButton = document.getElementById("reset");
@@ -8,16 +8,16 @@
     const divWrapper  = document.getElementById("divWrapper");
 
 
-    // Hämtar en ordlista från github som ligger i Torbackas offentliga repo
+    // Deklarerar en variabel WORDLIST_URL med en ordlista-URL från github som ligger i Torbackas offentliga repo
     const WORDLIST_URL =
       "https://raw.githubusercontent.com/Torbacka/wordlist/master/SAOL13_117224_Ord.txt";
 
-    // Skapar en tom list
+    // Skapar en tom lista som ska användas senare för att bli den rensade "texten"
     let dictionaryList = [];
     startButton.disabled = true;
     divWrapper.textContent = "Ladda ordlista …";
 
-
+    // Här hämtas ordlistan med hjälp av en fetch-request
       const res = await fetch(WORDLIST_URL, { cache: "force-cache" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const text = await res.text();
@@ -58,7 +58,8 @@
        och om knappen har tryckts så skapas en variabel input utifrån den redan deklarerade variabeln inputWord.
        sen skapas en variabel containedWords där funktionen canBeMadeFrom används på dictionaryList.
        Alla ord filtreras ut som är längre än 2 bokstäver OCH inte längre än ordet i inputfältet
-       OCH innehåller alla eller en del bokstäver av input-ordet/bokstäver.
+       OCH innehåller alla eller en del bokstäver av input-ordet/bokstäver. Ordet i input-fältet
+       får inte vara kortare än tre och inte längre än 7 bokstäver.
       */
     startButton.addEventListener("click", () => {
 
@@ -90,22 +91,23 @@
         inputWord.focus();
         return;
       }
-
+      // Kontrollera längden. När input-ordet är kortare än 3 bokstäver så visas ett meddelande.
       if (input.length < 3) {
         showMessage("Ordet måste ha minst 3 bokstäver.");
         inputWord.focus();
         return;
       }
-
+      // Den här nya variabeln "contained words" är outputen. Det läggs bara till ord när den har
+      //den riktiga längden och om canBeMadeFrom => true.
       const containedWords = dictionaryList
         .filter(w => w.length > 2 && w.length <= input.length && canBeMadeFrom(w, input))
         .sort((a,b) => a.length - b.length || a.localeCompare(b, "sv"))
-        .slice(0, 300);
+        .slice(0, 50);
 
       /* Här sätts divven "divWrapper" så att inte visa ngt, och det skapas en ny punktlista,
       för varje ord i listan containedWords skapas en listpunkt med innehållet av
       just det ordet och ordet läggs till nyskapade punktlista.
-      Sen läggs punktlistan till tomma divven divWrapper i html dokumentet.
+      Sen läggs punktlistan till tomma divven "divWrapper" i html dokumentet.
        */
       divWrapper.innerHTML = "";
       const ul = document.createElement("ul");
