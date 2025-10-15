@@ -7,36 +7,38 @@
     const inputWord   = document.getElementById("input");
     const divWrapper  = document.getElementById("divWrapper");
 
-    // Hämtar en ordlista från github
+
+    // Hämtar en ordlista från github som ligger i Torbackas offentliga repo
     const WORDLIST_URL =
       "https://raw.githubusercontent.com/Torbacka/wordlist/master/SAOL13_117224_Ord.txt";
 
+    // Skapar en tom list
     let dictionaryList = [];
     startButton.disabled = true;
     divWrapper.textContent = "Ladda ordlista …";
 
 
-    try {
       const res = await fetch(WORDLIST_URL, { cache: "force-cache" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const t = await res.text();
+      const text = await res.text();
+      // skapar en variabel "MIN_LEN" (minimum length) så att alla ord som filtreras ut sen är lika lång
+    // eller längre än tre bokstäver
       const MIN_LEN = 3;
-      dictionaryList = t
+      // Skapar ordlistan "dictionaryList" utifrån den hämtade texten ("text") som
+    // bl a rensar bort extra mellanslag, tomma rader och akronymer.
+      dictionaryList = text
         .split(/\r?\n/)
         .map(w => w.trim())
         .filter(Boolean)
         .filter(w => /^\p{L}+$/u.test(w))
         .filter(w => !/^[A-ZÅÄÖ]+$/.test(w))
+        .map(w => w.replace(/-/g, ''))
         .map(w => w.normalize("NFC").toLocaleUpperCase("sv-SE"))
         .filter(w => w.length >= MIN_LEN);
 
       startButton.disabled = false;
       divWrapper.textContent = "";
-    } catch (err) {
-      console.error("Dictionary load failed:", err);
-      divWrapper.textContent = "Kunde inte ladda ordlistan. Kontrollera din internetanslutning.";
-      return;
-    }
+
 
     // Funktionen testar om word kan byggas av bokstäverna i letters
     function canBeMadeFrom(word, letters) {
@@ -59,11 +61,41 @@
        OCH innehåller alla eller en del bokstäver av input-ordet/bokstäver.
       */
     startButton.addEventListener("click", () => {
-      const input = (inputWord.value || "")
-        .trim()
+
+      /* Skapar en funktion som först skapar en paragraph-element i HTML-filen som får klassen
+      "message" tilldelad, och innehållet blir string-parametern (stringIn), alltihop slängs in i
+      divven divWrapper */
+      function showMessage(stringIn) {
+        let para1 = document.createElement('p');
+        para1.innerText = stringIn;
+        para1.classList.add("message");
+        divWrapper.appendChild(para1);
+      }
+
+      const rawInput = (inputWord.value || "").trim();
+      if (!rawInput) {
+        showMessage("Skriv ett ord.");
+        inputWord.focus();
+        return;
+      }
+      // Här görs input jämförbart
+      const input = rawInput
         .normalize("NFC")
-        .toLocaleUpperCase("sv-SE");
-      if (!input) return;
+        .toLocaleUpperCase("sv-SE")
+        .replace(/-/g, "");
+
+      // Kontrollera längden. När input-ordet är längre än 7 bokstäver så visas ett meddelande.
+      if (input.length > 7) {
+        showMessage("Ordet får inte vara längre än 7 bokstäver. Försök igen.");
+        inputWord.focus();
+        return;
+      }
+
+      if (input.length < 3) {
+        showMessage("Ordet måste ha minst 3 bokstäver.");
+        inputWord.focus();
+        return;
+      }
 
       const containedWords = dictionaryList
         .filter(w => w.length > 2 && w.length <= input.length && canBeMadeFrom(w, input))

@@ -85,16 +85,40 @@ html {
 }
 
 #divWrapper li{
-  padding: 8px 12px; border-radius: 10px; background: rgba(255,255,255,.06);
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.06);
   border: 1px solid rgba(255,255,255,.14);
   box-shadow: 0 6px 14px rgba(2,8,23,.22);
-  transform: translateY(6px); opacity: 0; animation: rise .45s ease forwards;
+  transform: translateY(6px);
+  opacity: 0;
+  animation: rise .45s ease forwards;
 }
 #divWrapper li:nth-child(8n){ animation-delay: .02s }
 #divWrapper li:nth-child(8n+2){ animation-delay: .05s }
 #divWrapper li:nth-child(8n+4){ animation-delay: .08s }
 #divWrapper li:nth-child(8n+6){ animation-delay: .11s }
 @keyframes rise{ to{ transform: translateY(0); opacity: 1 } }
+
+/* Utifrån klassen "message" vi skapade i Javascript-dokument kan vi nu "styla" den */
+.message {
+  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+  font-family: 'Arial', sans-serif;
+  color: #b30000;           /* röd text */
+  background-color: #ffeaea; /* ljusröd bakgrund */
+  border: 1px solid #ffb3b3;
+  border-radius: 10px;
+  padding: 12px 18px;
+  margin: 10px auto;
+  width: fit-content;        /* gör att rutan blir lagom bred */
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+}
+
 
 /* Responsive */
 @media (max-width: 780px){
