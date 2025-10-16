@@ -54,9 +54,9 @@
       return true;
     }
 
-    /* När start-knappen i html-filen trycks gör den här funktionen att den lyssnar på klicket
+    /* När start-knappen i HTML-dokumentet trycks gör den här funktionen att den lyssnar på klicket
        och om knappen har tryckts så skapas en variabel input utifrån den redan deklarerade variabeln inputWord.
-       sen skapas en variabel containedWords där funktionen canBeMadeFrom används på dictionaryList.
+       sen skapas en output-variabel containedWords där funktionen canBeMadeFrom används på dictionaryList.
        Alla ord filtreras ut som är längre än 2 bokstäver OCH inte längre än ordet i inputfältet
        OCH innehåller alla eller en del bokstäver av input-ordet/bokstäver. Ordet i input-fältet
        får inte vara kortare än tre och inte längre än 7 bokstäver.
@@ -65,7 +65,7 @@
 
       /* Skapar en funktion som först skapar en paragraph-element i HTML-filen som får klassen
       "message" tilldelad, och innehållet av "para1" är string-parametern (stringIn);
-      paragraph-elementet bifogas till divven "divWrapper" */
+      paragraph-elementet bifogas till divven "divWrapper" i HTML-dokumentet */
       function showMessage(stringIn) {
         let para1 = document.createElement('p');
         para1.innerText = stringIn;
@@ -104,10 +104,10 @@
         .sort((a,b) => a.length - b.length || a.localeCompare(b, "sv"))
         .slice(0, 50);
 
-      /* Här sätts divven "divWrapper" så att inte visa ngt, och det skapas en ny punktlista,
-      för varje ord i listan containedWords skapas en listpunkt med innehållet av
-      just det ordet och ordet läggs till nyskapade punktlista.
-      Sen läggs punktlistan till tomma divven "divWrapper" i html dokumentet.
+      /* Här sätts divven "divWrapper" i HTML-dokumentet så att den inte visa ngt, och
+      det skapas en ny punktlista,för varje ord i listan containedWords skapas en listpunkt
+      med innehållet av just det ordet och ordet läggs till nyskapade punktlista.
+      Sen läggs punktlistan till tomma divven "divWrapper" i HTML-dokumentet.
        */
       divWrapper.innerHTML = "";
       const ul = document.createElement("ul");
@@ -120,7 +120,7 @@
     });
 
     /* Den här funktionen "lyssnar" på när resetknappen trycks
-    och sätter inputfältet och divven "divWrapper" i html dokumentet på tomt.
+    och sätter inputfältet och divven "divWrapper" i HTML-dokumentet på tomt.
     Fokusen sätts tillbaka till input-fältet så att markören hamnar där.
      */
     resetButton.addEventListener("click", () => {
